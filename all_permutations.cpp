@@ -10,7 +10,7 @@ public:
         for(int i = index;i<nums.size();i++) {
             swap(nums[index], nums[i]); 
             recurPermute(index+1, nums, ans); 
-            swap(nums[index], nums[i]); 
+            swap(nums[index], nums[i]); //swapping again because we want original string when we are backtracking 
         }
         
     }
