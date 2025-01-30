@@ -50,71 +50,60 @@ vector<int> dijkstra(vector<vector<int>> &vec, int vertices, int edges, int sour
 
 //using priority queue
 
-#include <iostream>
-#include <vector>
-#include <queue>
-#include <climits>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-// Function to perform Dijkstra's algorithm
-vector<int> dijkstra(int vertices, vector<pair<int, int>> adj[], int source) {
-    // Distance array to store the shortest distance from the source to each node
-    vector<int> dist(vertices, INT_MAX);
-    dist[source] = 0;
-
-    // Priority queue to store (distance, node), ordered by distance
+void dijkstra(int src, unordered_map<int, list<pair<int, int>>>& adjlist, int n) {
+    // Min-heap priority queue: (distance, node)
     priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
-    pq.push({0, source}); // Push source node with distance 0
+    
+    vector<int> dist(n, INT_MAX); // Distance array initialized with INT_MAX
+    dist[src] = 0;
+    pq.push({0, src}); // Start with the source node
 
     while (!pq.empty()) {
-        int nodeDistance = pq.top().first;
+        int d = pq.top().first;  // Current distance
         int node = pq.top().second;
         pq.pop();
 
-        // Explore all adjacent nodes
-        for (auto &neighbor : adj[node]) {
-            int neighborNode = neighbor.first;
-            int edgeWeight = neighbor.second;
+        // If the current distance is greater than the stored distance, ignore it
+        if (d > dist[node]) continue;
 
-            // Relaxation step: Check if a shorter path exists
-            if (dist[node] + edgeWeight < dist[neighborNode]) {
-                dist[neighborNode] = dist[node] + edgeWeight;
-                pq.push({dist[neighborNode], neighborNode}); // Push updated distance to priority queue
+        // Traverse neighbors
+        for (auto neighbor : adjlist[node]) {
+            int nextNode = neighbor.first;
+            int weight = neighbor.second;
+            int newDist = dist[node] + weight;
+
+            // If a shorter path is found, update
+            if (newDist < dist[nextNode]) {
+                dist[nextNode] = newDist;
+                pq.push({newDist, nextNode});
             }
         }
     }
 
-    return dist;
+    // Print the shortest distances
+    cout << "Shortest distances from node " << src << ":\n";
+    for (int i = 0; i < n; i++) {
+        cout << "Node " << i << " : " << (dist[i] == INT_MAX ? -1 : dist[i]) << endl;
+    }
 }
 
+// **Driver Code**
 int main() {
-    int vertices = 6; // Number of vertices
-    int edges = 9;    // Number of edges
-    vector<pair<int, int>> adj[vertices]; // Adjacency list: adj[node] = {(neighbor, weight)}
+    unordered_map<int, list<pair<int, int>>> adjlist; // Graph adjacency list
 
-    // Input edges: (u, v, weight)
-    vector<vector<int>> inputEdges = {
-        {0, 1, 4}, {0, 2, 4}, {1, 2, 2}, {1, 3, 5}, {2, 3, 8},
-        {2, 4, 9}, {3, 4, 4}, {3, 5, 6}, {4, 5, 3}
-    };
+    // Graph Representation
+    adjlist[0] = {{1, 4}, {2, 1}};
+    adjlist[1] = {{3, 1}};
+    adjlist[2] = {{1, 2}, {3, 5}};
+    adjlist[3] = {}; // No outgoing edges
 
-    // Build adjacency list
-    for (auto &edge : inputEdges) {
-        int u = edge[0], v = edge[1], weight = edge[2];
-        adj[u].push_back({v, weight});
-        adj[v].push_back({u, weight}); // Comment this line for a directed graph
-    }
+    int n = 4; // Number of nodes
+    int src = 0; // Source node
 
-    // Run Dijkstra's algorithm from source node 0
-    int source = 0;
-    vector<int> shortestDistances = dijkstra(vertices, adj, source);
-
-    // Output shortest distances
-    cout << "Shortest distances from node " << source << ":\n";
-    for (int i = 0; i < vertices; i++) {
-        cout << "Node " << i << ": " << shortestDistances[i] << "\n";
-    }
-
+    dijkstra(src, adjlist, n);
+    
     return 0;
 }
