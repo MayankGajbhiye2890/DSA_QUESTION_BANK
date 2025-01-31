@@ -17,7 +17,7 @@ public:
 
         int sum =0;
         for(auto it: mp){
-            sum+= it.second;
+            sum+= it.second; // at any point of time of the sum exceeds capacity return false
             if(sum > capacity){
                 return false;
             }
