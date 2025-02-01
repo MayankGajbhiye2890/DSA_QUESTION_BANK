@@ -57,8 +57,8 @@ int partition(vector<int>& nums, int left, int right) {
     int i = left + 1, j = right;
 
     while (i <= j) {
-        while (i <= j && nums[i] >= pivot) i++; // Move right if greater
-        while (i <= j && nums[j] < pivot) j--;  // Move left if smaller
+        while (nums[i] >= pivot) i++; // Move right if greater
+        while (&& nums[j] < pivot) j--;  // Move left if smaller
         if (i < j) swap(nums[i], nums[j]);
     }
     swap(nums[left], nums[j]); // Place pivot in its correct position
@@ -69,8 +69,8 @@ int quickSelect(vector<int>& nums, int left, int right, int k) {
     if (left <= right) {
         int pivotIndex = partition(nums, left, right);
         
-        if (pivotIndex == k - 1) return nums[pivotIndex]; // Found kth largest
-        else if (pivotIndex > k - 1) return quickSelect(nums, left, pivotIndex - 1, k);
+        if (pivotIndex == k) return nums[pivotIndex]; // Found kth largest
+        else if (k < pivotIndex) return quickSelect(nums, left, pivotIndex - 1, k);
         else return quickSelect(nums, pivotIndex + 1, right, k);
     }
     return -1;  // Should never reach here
@@ -83,7 +83,7 @@ int findKthLargest(vector<int>& nums, int k) {
 int main() {
     vector<int> arr = {3, 2, 1, 5, 6, 4};
     int k = 2;
-    cout << "The " << k << "-th largest element is: " << findKthLargest(arr, k) << endl;
+    cout << "The " << k << "-th largest element is: " << findKthLargest(arr, k-1) << endl;
     return 0;
 }
  
