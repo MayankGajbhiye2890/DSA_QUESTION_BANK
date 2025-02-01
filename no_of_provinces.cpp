@@ -1,22 +1,13 @@
-#include<bits/stdc++.h>
-using namespace std;
-
 class Solution {
 public:
 
-    void dfs( int src, unordered_map<int,bool>&visited, vector<vector<int>>& isConnected){
-     
-        int size = isConnected[src].size();
-        
+    void dfs( int src, unordered_map<int,bool>&visited, unordered_map<int, list<int>>&adjlist){
         visited[src] = true;
-        for(int col=0; col<size; col++){
-            if(src != col && isConnected[src][col] ==1 ){
-                if(!visited[col]){
-                    dfs(col, visited, isConnected);
-                }
+        for(auto nbr: adjlist[src]){
+            if(!visited[nbr]){
+                dfs(nbr, visited, adjlist);
             }
         }
-
     }
     int findCircleNum(vector<vector<int>>& isConnected) {
       
@@ -35,7 +26,7 @@ public:
         }
         for(int i=0; i<isConnected.size(); i++) {
             if(!visited[i]) {
-                dfs(i, visited, isConnected);
+                dfs(i, visited, adjlist);
                 count++;
             }
         }
