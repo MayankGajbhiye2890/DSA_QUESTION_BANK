@@ -17,27 +17,20 @@ public:
     ListNode* merge(ListNode* &l1, ListNode* &l2){
         ListNode * result = new ListNode(-1);
         ListNode * curr = result;
-        while(l1 != NULL || l2!=NULL){
-            if(l1==NULL){
-                curr->next = l2;
-                l2 = l2->next;
-            }
-            else if(l2==NULL){
+        while(l1 && l2){
+            if(l1->val < l2->val){
                 curr->next = l1;
                 l1 = l1->next;
             }
-            //now we know lodes are not null so we need to compare which one is shorter
-
-            else if(l1->val< l2->val){
-                curr->next = l1;
-                l1= l1->next;
-            }
             else{
-                curr->next = l2;
+                curr->next=l2;
                 l2 = l2->next;
             }
             curr = curr->next;
         }
+
+        if(l1) curr->next=l1;
+        if(l2) curr->next = l2;
         return result->next;
     }
     ListNode* mergeKLL(vector<ListNode*>& lists, int s, int e){
