@@ -26,4 +26,4 @@ int findPlatform(vector<int>& arr, vector<int>& dep) {
             }
         }
         return count;
-    }
+}
